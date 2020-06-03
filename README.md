@@ -1,13 +1,14 @@
 # Miio Gateway
 
-This is Miio Gateway EU version implementation based on encyryption-less `miio_client` 
-developed by [@roth-m](https://github.com/roth-m).
+Based on module by [@roth-m](https://github.com/roth-m) 
+
+This is Miio Gateway EU version implementation based on encryption-less `miio_client`.
 
 This component includes `XiaomiGw` class to communicate with Xiaomi devices via UDP port 54321.
 
 ## What for?
 
-In general it allows (modified) devices like `lumi.gateway.mieu01` to be controlled via LAN **instead of Xiaomi Cloud**.
+In general, it allows (modified) devices like `lumi.gateway.mieu01` to be controlled via LAN **instead of Xiaomi Cloud**.
 
 Once you replace original `miio_client` with modified one – you won't be able to control gateway via Mi Home app.
 But... why you would? ;)
@@ -18,19 +19,21 @@ But... why you would? ;)
 
 For mentioned gateway you need to gain access to SSH and **add** another `miio_client` binary to device.
 
+
 1. To obtain SSH access follow [this tutorial](https://community.openhab.org/t/solved-openhab2-xiaomi-mi-gateway-does-not-respond/52963/188?u=cadavre).
+
 2. Add new binary following [this readme](https://github.com/roth-m/miioclient-mqtt/tree/master/miio_client).
 
 **Notice!** You need to keep old `miio_client` because it's required for initialization of connection.
 
-**Warning!** Launching modified `miio_client` will disable Xiaomi cloud access so you won't be able to
+**Warning!** Launching modified `miio_client` will disable Xiaomi cloud access, so you won't be able to
 control the gateway from Mi Home app!
 
 ## What is supported
 
 * Built-in LED as `light.miio_gateway` component.
   > With brightness and colors.
-* Built-in speaker and sounds library as `media_player.miio_gateway` component.
+* The built-in speaker and sounds library as `media_player.miio_gateway` component.
   > With play, stop, mute, set_volume and play_media with ringtone ID as media ID.
 * Built-in luminescence sensor (yes, there's one) as `sensor.miio_gateway_illuminance` component.
   > Sensor shows readings in lumens.
@@ -38,7 +41,7 @@ control the gateway from Mi Home app!
   > Arm, disarm; night/home/away modes supported via alarm volumes: 5/15/70.
 
 * Child sensors as `binary_sensor`.
-  > Currently supported are:
+  > Currently, supported are:
   > * motion sensors,
   > * door/window sensors,
   > * leak sensors,
@@ -46,7 +49,7 @@ control the gateway from Mi Home app!
   > * buttons.
 
 * Child sensors as `sensor`.
-  > Currently supported are:
+  > Currently, supported are:
   > * temperature sensors,
   > * humidity sensors,
   > * pressure sensors.
@@ -94,7 +97,7 @@ miio_gateway.join_zigbee
 
 ```
 
-service to enter pairing mode. No need to kep original `miio_client` up for 10mins after gateway reboot!
+service to enter pairing mode. No need to kep original `miio_client` up for 10 mins after gateway reboot!
 
 ### Adding sensor to HA
 
@@ -150,42 +153,12 @@ Just like `button` – vibration sensor sends one of two events:
 
 You can use them just like with buttons. Event type is still `event_type: miio_gateway.action`.
 
-## Alarm finetuning
+## Alarm fine-tuning
 
 Since implementation of HASS'es `alarm_control_panel` into `miio_gateway` component
 requires a lot of copy-paste – I abandoned this idea.
 
-Instead you can use [coupled_alarms](https://github.com/cadavre/coupled_alarms).
-
-## Changelog
-
-### v1.3.1
-
-* Updated `alarm_control_panel` with `supported_features` to work with HA 0.103 and above.
-
-### v1.3
-
-* Added `restore` param to sensor mapping. Defaults to `false`, will restore pre-HA restart state if set to `true`.
-
-### v1.2
-
-* UDP socket gateway connection rebuilt.
-* Supports re-connections now.
-* Gateway after-unavailable state is now refreshed.
-* Fixed wrong logging params that caused gateway to freeze, thanks @quarcko !
-
-### v1.1
-
-* Changed entity_id and name generation methods.
-* Added support for temp/humid/pressure sensors.
-* Added support for vibration sensor.
-* Added `friendly_name` to sensor definition in config.yml.
-* Sensor `class` can be now anything from binary_sensor (door, garage_door, window, motion, moving, opening, smoke, vibration and more).
-  Keep in mind that not all Miio events are supported yet! Listed above are supported.
-* Sensor `class` can be now anything from sensor (humidity, illuminance, temperature, pressure and more).
-  Keep in mind that not all Miio events are supported yet! Listed above are supported.
-
-#### Breaking changes (v1.1)
+Instead, you can use [coupled_alarms](https://github.com/cadavre/coupled_alarms).
 
 ##### General
 

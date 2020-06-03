@@ -10,12 +10,14 @@ from . import DOMAIN, XiaomiGwDevice
 
 _LOGGER = logging.getLogger(__name__)
 
+
 def setup_platform(hass, config, add_entities, discovery_info=None):
     _LOGGER.info("Setting up light")
     devices = []
     gateway = hass.data[DOMAIN]
     devices.append(XiaomiGatewayLight(gateway))
     add_entities(devices)
+
 
 class XiaomiGatewayLight(XiaomiGwDevice, Light):
 
@@ -29,7 +31,7 @@ class XiaomiGatewayLight(XiaomiGwDevice, Light):
 
     def update_device_params(self):
         if self._gw.is_available():
-            self._send_to_hub({ "method": "toggle_light", "params": ["off"] })
+            self._send_to_hub({"method": "toggle_light", "params": ["off"]})
 
     @property
     def is_on(self):
@@ -56,12 +58,12 @@ class XiaomiGatewayLight(XiaomiGwDevice, Light):
         argb = (self._brightness,) + rgb
         argbhex = binascii.hexlify(struct.pack("BBBB", *argb)).decode("ASCII")
         argbhex = int(argbhex, 16)
-        self._send_to_hub({ "method": "set_rgb", "params": [argbhex] })
+        self._send_to_hub({"method": "set_rgb", "params": [argbhex]})
         self._state = True
         self.schedule_update_ha_state()
 
     def turn_off(self, **kwargs):
-        self._send_to_hub({ "method": "toggle_light", "params": ["off"] })
+        self._send_to_hub({"method": "toggle_light", "params": ["off"]})
         self._state = False
         self.schedule_update_ha_state()
 

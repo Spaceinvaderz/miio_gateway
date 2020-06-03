@@ -1,0 +1,4 @@
+{
+  "name": "miio_gateway",
+  "homeassistant": "0.110.0"
+}

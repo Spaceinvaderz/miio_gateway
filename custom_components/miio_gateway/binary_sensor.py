@@ -7,7 +7,8 @@ from homeassistant.components.binary_sensor import (
 from homeassistant.helpers.event import async_track_point_in_utc_time
 import homeassistant.util.dt as dt_util
 
-from . import DOMAIN, CONF_DATA_DOMAIN, CONF_SENSOR_SID, CONF_SENSOR_CLASS, CONF_SENSOR_NAME, CONF_SENSOR_RESTORE, EVENT_VALUES, XiaomiGwDevice
+from . import DOMAIN, CONF_DATA_DOMAIN, CONF_SENSOR_SID, CONF_SENSOR_CLASS, CONF_SENSOR_NAME, CONF_SENSOR_RESTORE, \
+    EVENT_VALUES, XiaomiGwDevice
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -43,6 +44,7 @@ EVENT_LONG_RELEASE = "event.long_click_release"
 
 IGNORED_EVENTS = [EVENT_VALUES, EVENT_TILT_ANGLE, EVENT_COORDINATION]
 
+
 def setup_platform(hass, config, add_entities, discovery_info=None):
     _LOGGER.info("Setting up binary sensors")
 
@@ -77,6 +79,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
     add_entities(entities)
     return True
+
 
 class XiaomiGwBinarySensor(XiaomiGwDevice, BinarySensorDevice):
 

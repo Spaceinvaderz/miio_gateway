@@ -1,4 +1,5 @@
 import logging
+from abc import ABC
 from datetime import timedelta
 
 from homeassistant.components.media_player import MediaPlayerDevice
@@ -17,8 +18,9 @@ _LOGGER = logging.getLogger(__name__)
 
 PLAYING_TIME = timedelta(seconds=10)
 
-SUPPORT_PLAYER = SUPPORT_VOLUME_SET | SUPPORT_VOLUME_MUTE | SUPPORT_PLAY_MEDIA |\
-    SUPPORT_PLAY | SUPPORT_STOP
+SUPPORT_PLAYER = SUPPORT_VOLUME_SET | SUPPORT_VOLUME_MUTE | SUPPORT_PLAY_MEDIA | \
+                 SUPPORT_PLAY | SUPPORT_STOP
+
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     _LOGGER.info("Setting up sound player")
@@ -27,7 +29,8 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     devices.append(XiaomiGatewayLight(gateway))
     add_entities(devices)
 
-class XiaomiGatewayLight(XiaomiGwDevice, MediaPlayerDevice):
+
+class XiaomiGatewayLight(XiaomiGwDevice, MediaPlayerDevice, ABC):
 
     def __init__(self, gw):
         XiaomiGwDevice.__init__(self, gw, "media_player", None, "miio.gateway", "Gateway Player")
@@ -41,7 +44,7 @@ class XiaomiGatewayLight(XiaomiGwDevice, MediaPlayerDevice):
 
     def update_device_params(self):
         if self._gw.is_available():
-            self._send_to_hub({ "method": "get_prop", "params": ["gateway_volume"] }, self._init_set_volume)
+            self._send_to_hub({"method": "get_prop", "params": ["gateway_volume"]}, self._init_set_volume)
 
     def _init_set_volume(self, result):
         if result is not None:
@@ -50,12 +53,12 @@ class XiaomiGatewayLight(XiaomiGwDevice, MediaPlayerDevice):
 
     def set_volume_level(self, volume):
         int_volume = int(volume * 100)
-        self._send_to_hub({ "method": "set_gateway_volume", "params": [int_volume] })
+        self._send_to_hub({"method": "set_gateway_volume", "params": [int_volume]})
         self._volume = volume
         self.schedule_update_ha_state()
 
     def mute_volume(self, mute):
-        self._send_to_hub({ "method": "set_mute", "params": [str(mute).lower()] })
+        self._send_to_hub({"method": "set_mute", "params": [str(mute).lower()]})
         self._muted = mute
         self.schedule_update_ha_state()
 
@@ -69,7 +72,7 @@ class XiaomiGatewayLight(XiaomiGwDevice, MediaPlayerDevice):
         int_volume = int(self._volume * 100)
         if new_volume is not None:
             int_volume = int(new_volume)
-        self._send_to_hub({ "method": "play_music_new", "params": [str(self._ringtone), int_volume] })
+        self._send_to_hub({"method": "play_music_new", "params": [str(self._ringtone), int_volume]})
         self._state = STATE_PLAYING
         self._player_tracker = async_track_point_in_utc_time(
             self.hass, self._async_playing_finished,
@@ -80,7 +83,7 @@ class XiaomiGatewayLight(XiaomiGwDevice, MediaPlayerDevice):
         if self._player_tracker is not None:
             self._player_tracker()
             self._player_tracker = None
-        self._send_to_hub({ "method": "set_sound_playing", "params": ["off"] })
+        self._send_to_hub({"method": "set_sound_playing", "params": ["off"]})
         self._state = STATE_IDLE
         self.schedule_update_ha_state()
 
@@ -109,7 +112,7 @@ class XiaomiGatewayLight(XiaomiGwDevice, MediaPlayerDevice):
 
     @property
     def supported_features(self):
-       return SUPPORT_PLAYER
+        return SUPPORT_PLAYER
 
     @property
     def media_content_type(self):

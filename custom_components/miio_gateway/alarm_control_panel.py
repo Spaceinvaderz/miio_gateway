@@ -1,4 +1,5 @@
 import logging
+from abc import ABC
 
 import homeassistant.components.alarm_control_panel as alarm
 
@@ -14,6 +15,7 @@ from homeassistant.components.alarm_control_panel.const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+
 def setup_platform(hass, config, add_entities, discovery_info=None):
     _LOGGER.info("Setting up alarm")
     devices = []
@@ -21,7 +23,8 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     devices.append(XiaomiGatewayAlarm(gateway))
     add_entities(devices)
 
-class XiaomiGatewayAlarm(XiaomiGwDevice, alarm.AlarmControlPanel):
+
+class XiaomiGatewayAlarm(XiaomiGwDevice, alarm.AlarmControlPanel, ABC):
 
     def __init__(self, gw):
         XiaomiGwDevice.__init__(self, gw, "alarm_control_panel", None, "miio.gateway", "Gateway Alarm")
@@ -37,8 +40,8 @@ class XiaomiGatewayAlarm(XiaomiGwDevice, alarm.AlarmControlPanel):
 
     def update_device_params(self):
         if self._gw.is_available():
-            self._send_to_hub({ "method": "get_prop", "params": ["arming"] }, self._init_set_arming)
-            self._send_to_hub({ "method": "get_prop", "params": ["alarming_volume"] }, self._init_set_volume)
+            self._send_to_hub({"method": "get_prop", "params": ["arming"]}, self._init_set_arming)
+            self._send_to_hub({"method": "get_prop", "params": ["alarming_volume"]}, self._init_set_volume)
 
     def _init_set_arming(self, result):
         if result is not None:
@@ -91,22 +94,22 @@ class XiaomiGatewayAlarm(XiaomiGwDevice, alarm.AlarmControlPanel):
         self.schedule_update_ha_state()
 
     def _arm(self):
-        self._send_to_hub({ "method": "set_alarming_volume", "params": [self._volume] })
-        self._send_to_hub({ "method": "set_sound_playing", "params": ["off"] })
-        self._send_to_hub({ "method": "set_arming", "params": ["on"] })
+        self._send_to_hub({"method": "set_alarming_volume", "params": [self._volume]})
+        self._send_to_hub({"method": "set_sound_playing", "params": ["off"]})
+        self._send_to_hub({"method": "set_arming", "params": ["on"]})
 
     def _disarm(self):
-        self._send_to_hub({ "method": "set_sound_playing", "params": ["off"] })
-        self._send_to_hub({ "method": "set_arming", "params": ["off"] })
+        self._send_to_hub({"method": "set_sound_playing", "params": ["off"]})
+        self._send_to_hub({"method": "set_arming", "params": ["off"]})
 
     def _siren(self):
         # TODO playlist
-        self._send_to_hub({ "method": "play_music_new", "params": [str(self._ringtone), self._volume] })
+        self._send_to_hub({"method": "play_music_new", "params": [str(self._ringtone), self._volume]})
 
     def _blink(self):
         # TODO blink
         argbhex = [int("01" + self._color, 16), int("64" + self._color, 16)]
-        self._send_to_hub({ "method": "set_rgb", "params": [argbhex[1]] })
+        self._send_to_hub({"method": "set_rgb", "params": [argbhex[1]]})
 
     def _is_armed(self):
         if self._state is not None or self._state != STATE_ALARM_TRIGGERED or self._state != STATE_ALARM_DISARMED:
