@@ -54,13 +54,17 @@ control the gateway from Mi Home app!
 ## Installation of HA component
 
 1. Clone this repo as `miio_gateway` dir into `$HA_CONFIG_DIR/custom_components/`:
-   ```
+   ```bash
+   
    $ cd custom_components
    $ git clone git@github.com:cadavre/miio_gateway.git ./miio_gateway
+   
    ```
+
 2. Setup `$HA_CONFIG_DIR/configuration.yaml`:
 
 ```yaml
+
 miio_gateway:
   host: 192.168.1.2    # IP of your gateway
   port: 54321          # port running miio_client, defaults to 54321
@@ -75,6 +79,7 @@ miio_gateway:
       class: button                           # button
     - sid: lumi.smk1
       class: smoke                            # smoke sensor
+
 ```
 
 ## Zibgee devices
@@ -83,8 +88,10 @@ miio_gateway:
 
 You can pair new devices without entering Mi Home app by using HA service, just call:
 
-```
+```yaml
+
 miio_gateway.join_zigbee
+
 ```
 
 service to enter pairing mode. No need to kep original `miio_client` up for 10mins after gateway reboot!
@@ -94,8 +101,10 @@ service to enter pairing mode. No need to kep original `miio_client` up for 10mi
 Once you've paired new device you'll be able to see "unregistered" sensor in your HA logs.
 
 ```
+
 Received event from unregistered sensor: lumi.sensor_motion.v2 lumi.abcd - event.motion
                                          ^ model               ^ sid       ^ event that was sent
+
 ```
 
 Use SID to define it in `sensors:` section of `configuration.yaml`.
@@ -117,6 +126,7 @@ Click type available payloads:
 **Automation example:**
 
 ```yaml
+
 - alias: 'Toggle the light'
   trigger:
     platform: event
@@ -127,6 +137,7 @@ Click type available payloads:
   action:
     - service: light.toggle
       entity_id: light.my_light
+
 ```
 
 ### Using vibration sensor
