@@ -44,7 +44,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         gateway.append_known_sid(sid)
 
         if device_class in all_device_classes:
-            _LOGGER.info("Registering " + str(device_class) + " sid " + str(sid) + " as sensor")
+            _LOGGER.info("Registering %s sid %s as sensor", device_class, sid)
             entities.append(XiaomiGwSensor(gateway, device_class, sid, name, restore))
 
     if not entities:

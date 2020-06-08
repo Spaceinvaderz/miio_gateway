@@ -145,7 +145,7 @@ class XiaomiGw:
         """Send data to hub."""
         miio_id, data = self._miio_msg_encode(data)
         if callback is not None:
-            _LOGGER.info("Adding callback for call ID: " + str(miio_id))
+            _LOGGER.info("Adding callback for call ID: %s", miio_id)
             self._result_callbacks[miio_id] = callback
         self._send_queue.put(data)
 
@@ -270,7 +270,7 @@ class XiaomiGw:
             self._available = False
 
         if availability_changed:
-            _LOGGER.info("Gateway availability changed! Available: " + str(available))
+            _LOGGER.info("Gateway availability changed! Available: %s", available)
             for func in self._callbacks:
                 func(None, None, EVENT_AVAILABILITY)
 
@@ -350,7 +350,7 @@ class XiaomiGw:
                     event = EVENT_VALUES
                 else:
                     """Unknown method."""
-                    _LOGGER.info("Received unknown method: " + str(method))
+                    _LOGGER.info("Received unknown method: %s", method)
                     continue
 
                 # Now we have all the data we need
@@ -359,14 +359,14 @@ class XiaomiGw:
 
             else:
                 """Nothing that we can handle."""
-                _LOGGER.error("Non-parsable data: " + str(res))
+                _LOGGER.error("Non-parsable data: %s", res)
 
     def _event_received(self, model, sid, event):
         """Callback for receiving sensor event from gateway."""
-        _LOGGER.debug("Received event: " + str(model) + " " + str(sid) + " - " + str(event))
+        _LOGGER.debug("Received event: %s %s - %s", model, sid, event)
         if sid not in self._known_sids:
             _LOGGER.warning(
-                "Received event from unregistered sensor: " + str(model) + " " + str(sid) + " - " + str(event))
+                "Received event from unregistered sensor: %s %s - %s", model, sid, event)
 
     """Miio."""
 
@@ -398,7 +398,7 @@ class XiaomiGw:
             data_arr = "[" + data.decode().replace("}{", "},{") + "]"
             resps = json.loads(data_arr)
         except:
-            _LOGGER.warning("Bad JSON received: " + str(data))
+            _LOGGER.warning("Bad JSON received: %s", data)
         return resps
 
 
@@ -509,11 +509,11 @@ class XiaomiGwDevice(RestoreEntity):
 
         # Generic handler for _otg.log
         if event == EVENT_METADATA:
-            zigbeeData = params.get("subdev_zigbee")
-            if zigbeeData is not None:
-                self._voltage = zigbeeData.get("voltage")
-                self._lqi = zigbeeData.get("lqi")
-                _LOGGER.info("Vol:" + str(self._voltage) + " lqi:" + str(self._lqi))
+            zigbee_data = params.get("subdev_zigbee")
+            if zigbee_data is not None:
+                self._voltage = zigbee_data.get("voltage")
+                self._lqi = zigbee_data.get("lqi")
+                _LOGGER.info("Vol: %s  lqi: %s", self._voltage, self._lqi)
                 return True
             return False
 
