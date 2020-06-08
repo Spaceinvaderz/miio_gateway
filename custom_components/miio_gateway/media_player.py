@@ -49,7 +49,7 @@ class XiaomiGatewayLight(XiaomiGwDevice, MediaPlayerEntity, ABC):
     def _init_set_volume(self, result):
         if result is not None:
             _LOGGER.info("SETTING VOL: %s", result)
-            self._volume = int(result) / 100
+            self._volume = int(float(result)) / 100
 
     def set_volume_level(self, volume):
         int_volume = int(volume * 100)
