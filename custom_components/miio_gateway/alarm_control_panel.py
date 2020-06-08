@@ -54,7 +54,7 @@ class XiaomiGatewayAlarm(XiaomiGwDevice, alarm.AlarmControlPanelEntity, ABC):
     def _init_set_volume(self, result):
         if result is not None:
             _LOGGER.info("SETTING ARMED VOL: %s", result)
-            self._volume = int(result)
+            self._volume = int(float(result))
             self._state_by_volume = self._get_state_by_volume(self._volume)
             if self._is_armed():
                 self._state = self._state_by_volume
