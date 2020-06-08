@@ -1,5 +1,9 @@
 # Changelog
 
+### v.1.4.1
+
+* Preparing for release  
+
 ### v.1.4.0
 
 * Reordered files structure and prepared for using in HACS store.
