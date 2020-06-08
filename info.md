@@ -1,11 +1,5 @@
 # Miio Gateway
 
-Based on module by [@roth-m](https://github.com/roth-m)
-
-This is Miio Gateway EU version implementation based on encryption-less `miio_client`.
-
-This component includes `XiaomiGw` class to communicate with Xiaomi devices via UDP port 54321.
-
 ## What for?
 
 In general, it allows (modified) devices like `lumi.gateway.mieu01` to be controlled via LAN **instead of Xiaomi Cloud**.
@@ -13,21 +7,7 @@ In general, it allows (modified) devices like `lumi.gateway.mieu01` to be contro
 Once you replace original `miio_client` with modified one – you won't be able to control gateway via Mi Home app.
 But... why you would? ;)
 
-## Requirements
-
-**Based on `lumi.gateway.mieu01`**
-
-For mentioned gateway you need to gain access to SSH and **add** another `miio_client` binary to device.
-
-
-1. To obtain SSH access follow [this tutorial](https://community.openhab.org/t/solved-openhab2-xiaomi-mi-gateway-does-not-respond/52963/188?u=cadavre).
-
-2. Add new binary following [this readme](https://github.com/roth-m/miioclient-mqtt/tree/master/miio_client).
-
-**Notice!** You need to keep old `miio_client` because it's required for initialization of connection.
-
-**Warning!** Launching modified `miio_client` will disable Xiaomi cloud access, so you won't be able to
-control the gateway from Mi Home app!
+Please check the repository for [the repository](https://github.com/Spaceinvaderz/miio_gateway/blob/master/README.md) and usage instructions.
 
 ## What is supported
 
@@ -53,127 +33,6 @@ control the gateway from Mi Home app!
   > * temperature sensors,
   > * humidity sensors,
   > * pressure sensors.
-
-## Installation of HA component
-
-1. Clone this repo as `miio_gateway` dir into `$HA_CONFIG_DIR/custom_components/`:
-   ```bash
-
-   $ cd custom_components
-   $ git clone git@github.com:cadavre/miio_gateway.git ./miio_gateway
-
-   ```
-
-2. Setup `$HA_CONFIG_DIR/configuration.yaml`:
-
-```yaml
-
-miio_gateway:
-  host: 192.168.1.2    # IP of your gateway
-  port: 54321          # port running miio_client, defaults to 54321
-  sensors:             # sensors that will be available in HA (optional)
-    - sid: lumi.abcd
-      class: motion                           # motion sensor
-      friendly_name: My garage motion sensor  # display name (optional)
-    - sid: lumi.0123
-      class: door                             # door sensor
-      restore: true                           # will restore sensor state after HA reboot
-    - sid: lumi.ab01
-      class: button                           # button
-    - sid: lumi.smk1
-      class: smoke                            # smoke sensor
-
-```
-
-## Zibgee devices
-
-### Pairing
-
-You can pair new devices without entering Mi Home app by using HA service, just call:
-
-```yaml
-
-miio_gateway.join_zigbee
-
-```
-
-service to enter pairing mode. No need to kep original `miio_client` up for 10 mins after gateway reboot!
-
-### Adding sensor to HA
-
-Once you've paired new device you'll be able to see "unregistered" sensor in your HA logs.
-
-```
-
-Received event from unregistered sensor: lumi.sensor_motion.v2 lumi.abcd - event.motion
-                                         ^ model               ^ sid       ^ event that was sent
-
-```
-
-Use SID to define it in `sensors:` section of `configuration.yaml`.
-
-### Using Zigbee button
-
-Zigbee buttons are triggering an events for their actions.
-
-Event type: `miio_gateway.action`
-
-Available event data: `event_type`
-
-Click type available payloads:
-* `click`
-* `double_click`
-* `long_click_press`
-* `long_click_release`
-
-**Automation example:**
-
-```yaml
-
-- alias: 'Toggle the light'
-  trigger:
-    platform: event
-    event_type: miio_gateway.action
-    event_data:
-      event_type: 'click'
-      entity_id: 'binary_sensor.lumi_ab01_button'
-  action:
-    - service: light.toggle
-      entity_id: light.my_light
-
-```
-
-### Using vibration sensor
-
-Just like `button` – vibration sensor sends one of two events:
-* `vibration` on vibration
-* `free_fall` on free-fall
-* `tilt` on tilt by an angle
-* `bed_activity` on... bed activity? :D
-
-You can use them just like with buttons. Event type is still `event_type: miio_gateway.action`.
-
-## Alarm fine-tuning
-
-Since implementation of HASS'es `alarm_control_panel` into `miio_gateway` component
-requires a lot of copy-paste – I abandoned this idea.
-
-Instead, you can use [coupled_alarms](https://github.com/cadavre/coupled_alarms).
-
-##### General
-
-* Due to changed method of entity_id generation, after update, all entities will have new entity_ids.
-  You can remove old entities before update via `Settings -> Entity registry` with `miio_gateway` tag.
-  Then you can update this component and restart HA.
-  After restart new entities will be visible – you'll be able to change its entity_id via "Entity registry" too.
-
-##### Button events
-
-* `miio_gateway.button_action` event changed to `miio_gateway.action`
-* `click_type` event param changed to `event_type`
-* `single_click` changed to `click`
-* `long_press` changed to `long_click_press`
-* `long_release` changed to `long_click_release`
 
 ## Not supported yet
 

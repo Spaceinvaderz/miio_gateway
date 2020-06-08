@@ -1,0 +1,10 @@
+{
+    "domain": "miio_gateway",
+    "name": "Miio (custom) gateway integration",
+    "documentation": "https://github.com/Spaceinvaderz/miio_gateway",
+    "dependencies": [],
+    "codeowners": [],
+    "requirements": [
+        "voluptuous~=0.11.7"
+    ]
+  }

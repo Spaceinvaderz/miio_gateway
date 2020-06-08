@@ -1,8 +1,0 @@
-{
-    "domain": "miio_gateway",
-    "name": "Miio gateway integration",
-    "documentation": "https://github.com/Spaceinvaderz/miio_gateway/blob/master/README.md",
-    "dependencies": [],
-    "codeowners": [],
-    "requirements": []
-  }
