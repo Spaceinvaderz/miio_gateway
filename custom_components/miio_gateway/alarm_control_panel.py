@@ -24,7 +24,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities(devices)
 
 
-class XiaomiGatewayAlarm(XiaomiGwDevice, alarm.AlarmControlPanel, ABC):
+class XiaomiGatewayAlarm(XiaomiGwDevice, alarm.AlarmControlPanelEntity, ABC):
 
     def __init__(self, gw):
         XiaomiGwDevice.__init__(self, gw, "alarm_control_panel", None, "miio.gateway", "Gateway Alarm")

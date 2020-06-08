@@ -3,7 +3,7 @@ import binascii
 import struct
 
 from homeassistant.components.light import (
-    Light, ATTR_BRIGHTNESS, ATTR_HS_COLOR, SUPPORT_BRIGHTNESS, SUPPORT_COLOR)
+    LightEntity, ATTR_BRIGHTNESS, ATTR_HS_COLOR, SUPPORT_BRIGHTNESS, SUPPORT_COLOR)
 import homeassistant.util.color as color_util
 
 from . import DOMAIN, XiaomiGwDevice
@@ -19,7 +19,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities(devices)
 
 
-class XiaomiGatewayLight(XiaomiGwDevice, Light):
+class XiaomiGatewayLight(XiaomiGwDevice, LightEntity):
 
     def __init__(self, gw):
         XiaomiGwDevice.__init__(self, gw, "light", None, "miio.gateway", "Gateway LED")

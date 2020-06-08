@@ -2,7 +2,7 @@ import logging
 from abc import ABC
 from datetime import timedelta
 
-from homeassistant.components.media_player import MediaPlayerDevice
+from homeassistant.components.media_player import MediaPlayerEntity
 from homeassistant.components.media_player.const import (
     MEDIA_TYPE_MUSIC, SUPPORT_VOLUME_SET, SUPPORT_VOLUME_MUTE, SUPPORT_PLAY_MEDIA,
     SUPPORT_PLAY, SUPPORT_STOP)
@@ -30,7 +30,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities(devices)
 
 
-class XiaomiGatewayLight(XiaomiGwDevice, MediaPlayerDevice, ABC):
+class XiaomiGatewayLight(XiaomiGwDevice, MediaPlayerEntity, ABC):
 
     def __init__(self, gw):
         XiaomiGwDevice.__init__(self, gw, "media_player", None, "miio.gateway", "Gateway Player")
