@@ -1,5 +1,12 @@
 # Changelog
 
+## Unpublished 
+
+### 1.4.3
+
+* Partially adapted fixes from the main repo: [Get current RGBA value and set it #1](https://github.com/cadavre/miio_gateway/pull/1/files?diff=unified&w=1#diff-6ce3c4a54273f4ac99133eb77fece7f6)
+
+
 ### 1.4.2
 
 * Removing deprecation warnings from HAS libs
