@@ -1,6 +1,6 @@
 # Miio Gateway
 
-Based on module by [@roth-m](https://github.com/roth-m) 
+Based on module by [@roth-m](https://github.com/roth-m/miioclient-mqtt) 
 
 This is Miio Gateway EU version implementation based on encryption-less `miio_client`.
 
